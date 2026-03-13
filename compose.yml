@@ -12,6 +12,10 @@ services:
       LANGEVALS_ENDPOINT: http://langevals:5562
       INSTALL_METHOD: docker
       NODE_ENV: production
+      # Required for workers (app + workers run in same container via pnpm start)
+      BASE_HOST: http://localhost:5560
+      NEXTAUTH_URL: http://localhost:5560
+      # NEXTAUTH_SECRET must be in langwatch/.env
     env_file:
       - langwatch/.env
     pull_policy: always

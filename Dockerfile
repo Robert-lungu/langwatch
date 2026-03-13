@@ -26,7 +26,8 @@ COPY langwatch/vendor ./langwatch/vendor
 # https://stackoverflow.com/questions/70154568/pnpm-equivalent-command-for-npm-ci
 RUN cd langwatch && CI=true pnpm install --frozen-lockfile
 COPY langwatch ./langwatch
-RUN cd langwatch && pnpm run build
+# Increase Node heap for Next.js build (avoids "JavaScript heap out of memory")
+RUN cd langwatch && NODE_OPTIONS="--max-old-space-size=4096" pnpm run build
 EXPOSE 5560
 
 ENV NODE_ENV=production

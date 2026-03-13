@@ -1,0 +1,59 @@
+# Copy to terraform.tfvars and fill in your values
+# NEVER commit terraform.tfvars - it contains secrets!
+
+aws_region   = "us-east-1"
+environment  = "prod"
+project_name = "langwatch"
+
+# Public URL - leave empty to use ALB URL (http://<alb_dns_name>) - no DNS needed
+# For custom domain: public_url = "https://langwatch.example.com" + set acm_certificate_arn
+# public_url = ""
+
+# ACM certificate ARN for HTTPS (required for custom domain)
+# acm_certificate_arn = "arn:aws:acm:eu-west-1:ACCOUNT:certificate/CERT_ID"
+
+# -----------------------------------------------------------------------------
+# ECR (recommended - avoids Docker Hub rate limits)
+# -----------------------------------------------------------------------------
+# use_ecr       = true
+# ecr_image_tag = "latest"
+
+# Build LangWatch from source via CodeBuild (enables HTTP support)
+# Set true, push code to CodeCommit, then run: aws codebuild start-build --project-name <langwatch_build_codebuild_project>
+# build_langwatch_from_source = true
+
+# -----------------------------------------------------------------------------
+# REQUIRED: Set these before applying
+# -----------------------------------------------------------------------------
+# database_password - Leave unset to auto-generate (stored in Secrets Manager)
+
+# Generate with: openssl rand -base64 32 (optional - leave empty to auto-generate)
+nextauth_secret = ""
+
+# Generate with: openssl rand -base64 32
+api_token_jwt_secret = ""
+
+# -----------------------------------------------------------------------------
+# Optional: Use existing VPC
+# -----------------------------------------------------------------------------
+# use_existing_vpc          = true
+# existing_vpc_id           = "vpc-xxxxx"
+# existing_private_subnet_ids = ["subnet-xxx", "subnet-yyy"]
+# existing_public_subnet_ids  = ["subnet-aaa", "subnet-bbb"]
+
+# -----------------------------------------------------------------------------
+# Optional: Redis auth (recommended for production)
+# -----------------------------------------------------------------------------
+# redis_auth_token = ""
+
+# -----------------------------------------------------------------------------
+# OpenSearch: false = self-hosted in ECS (recommended - works with LangWatch out of box)
+#             true  = AWS OpenSearch Service (requires IAM/SigV4 - not yet supported by LangWatch)
+# -----------------------------------------------------------------------------
+# use_managed_opensearch = false
+
+# -----------------------------------------------------------------------------
+# Optional: Override PostgreSQL version if data source fails (e.g. rds_engine_version = "16.1")
+# Run: aws rds describe-db-engine-versions --engine postgres --region <region> --query 'DBEngineVersions[?contains(EngineVersion, `16`)].EngineVersion'
+# -----------------------------------------------------------------------------
+# rds_engine_version = ""

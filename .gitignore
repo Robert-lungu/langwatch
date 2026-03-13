@@ -15,6 +15,11 @@ langwatch_server/
 # vscode
 .vscode/
 
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+
 # Misc
 .local
 
