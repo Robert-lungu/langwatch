@@ -239,3 +239,9 @@ variable "app_desired_count" {
   type        = number
   default     = 1
 }
+
+variable "app_health_check_grace_period_seconds" {
+  description = "Grace period (seconds) before ALB health checks count against the app service. App startup (OpenSearch wait, migrations, Next.js) can take 5+ minutes."
+  type        = number
+  default     = 600
+}

@@ -173,6 +173,7 @@ After `terraform apply`:
 ## Scaling
 
 - Adjust `app_desired_count` and `workers_desired_count` in variables.
+- If app tasks become unhealthy during deployment, increase `app_health_check_grace_period_seconds` (default 600). App startup can take 5+ minutes.
 - Add `aws_appautoscaling_target` and `aws_appautoscaling_policy` for auto-scaling.
 
 ## Troubleshooting Stopped Tasks

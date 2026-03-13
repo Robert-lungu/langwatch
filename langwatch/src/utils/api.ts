@@ -19,7 +19,13 @@ import { sseLink } from "./sseLink";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return window.location.origin; // browser should use origin for full URLs
-  if (process.env.BASE_HOST) return `https://${process.env.BASE_HOST}`; // SSR should use base host
+  const base = process.env.BASE_HOST ?? process.env.NEXTAUTH_URL;
+  if (base) {
+    // Use as-is if it already has a protocol (http:// or https://)
+    if (base.startsWith("http://") || base.startsWith("https://"))
+      return base.replace(/\/$/, ""); // trim trailing slash
+    return `https://${base}`;
+  }
   return `http://localhost:${process.env.PORT ?? 5560}`; // dev SSR should use localhost
 };
 

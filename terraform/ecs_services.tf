@@ -21,6 +21,8 @@ resource "aws_ecs_service" "app" {
     container_port  = 5560
   }
 
+  health_check_grace_period_seconds = var.app_health_check_grace_period_seconds
+
   service_registries {
     registry_arn = aws_service_discovery_service.app.arn
   }

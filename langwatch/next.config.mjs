@@ -13,8 +13,9 @@ const isProduction =
   process.env.NODE_ENV !== "development" && process.env.NODE_ENV !== "test";
 
 function buildCspHeader() {
+  // Default to http:// when unset - avoids upgrade-insecure-requests on HTTP-only ALB
   const baseUrl =
-    process.env.BASE_HOST ?? process.env.NEXTAUTH_URL ?? "https://";
+    process.env.BASE_HOST ?? process.env.NEXTAUTH_URL ?? "http://";
   const useHttps = baseUrl.startsWith("https://");
   const upgradeInsecure =
     isProduction && useHttps ? "upgrade-insecure-requests;" : "";
@@ -100,8 +101,9 @@ const config = {
   },
 
   async headers() {
+    // Default to http:// when unset - avoids HSTS/upgrade on HTTP-only ALB
     const baseUrl =
-      process.env.BASE_HOST ?? process.env.NEXTAUTH_URL ?? "https://";
+      process.env.BASE_HOST ?? process.env.NEXTAUTH_URL ?? "http://";
     const useHttps = baseUrl.startsWith("https://");
     // Only enable upgrade-insecure-requests and HSTS when served over HTTPS
     // (avoids ERR_CONNECTION_REFUSED when using HTTP ALB URL for testing)

@@ -54,6 +54,13 @@ api_token_jwt_secret = ""
 # use_managed_opensearch = false
 
 # -----------------------------------------------------------------------------
+# Optional: App health check grace period (default 600s)
+# App startup (OpenSearch wait, migrations, Next.js) can take 5+ minutes.
+# Increase if deployments fail with unhealthy tasks.
+# -----------------------------------------------------------------------------
+# app_health_check_grace_period_seconds = 600
+
+# -----------------------------------------------------------------------------
 # Optional: Override PostgreSQL version if data source fails (e.g. rds_engine_version = "16.1")
 # Run: aws rds describe-db-engine-versions --engine postgres --region <region> --query 'DBEngineVersions[?contains(EngineVersion, `16`)].EngineVersion'
 # -----------------------------------------------------------------------------
