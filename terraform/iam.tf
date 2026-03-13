@@ -234,13 +234,6 @@ resource "aws_iam_role_policy" "codebuild_langwatch_build" {
       {
         Effect = "Allow"
         Action = [
-          "codecommit:GitPull"
-        ]
-        Resource = aws_codecommit_repository.langwatch[0].arn
-      },
-      {
-        Effect = "Allow"
-        Action = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"

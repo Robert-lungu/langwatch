@@ -102,7 +102,7 @@ output "langwatch_build_command" {
   value       = var.use_ecr && var.build_langwatch_from_source ? "aws codebuild start-build --project-name ${aws_codebuild_project.langwatch_build[0].name} --region ${data.aws_region.current.name}" : null
 }
 
-output "langwatch_codecommit_clone_url" {
-  description = "CodeCommit clone URL - push your code here before running the build"
-  value       = var.use_ecr && var.build_langwatch_from_source ? aws_codecommit_repository.langwatch[0].clone_url_http : null
+output "langwatch_github_repo" {
+  description = "GitHub repo used for LangWatch build - push your code here, then run the build"
+  value       = var.use_ecr && var.build_langwatch_from_source ? var.langwatch_github_repo_url : null
 }

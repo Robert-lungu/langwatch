@@ -95,7 +95,7 @@ resource "aws_codebuild_project" "ecr_sync" {
 
 # -----------------------------------------------------------------------------
 # CodeBuild - Build LangWatch from source (HTTP support) + sync other images
-# Requires: build_langwatch_from_source = true, push code to CodeCommit first
+# Uses GitHub repo - push to GitHub, then run the build
 # Run: aws codebuild start-build --project-name <output langwatch_build_codebuild_project>
 # -----------------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ resource "aws_cloudwatch_log_group" "codebuild_langwatch_build" {
   count = var.use_ecr && var.build_langwatch_from_source ? 1 : 0
 
   name              = "/aws/codebuild/${var.project_name}-${var.environment}-langwatch-build"
-  retention_in_days  = 7
+  retention_in_days = 7
 
   tags = {
     Name = "${var.project_name}-${var.environment}-langwatch-build-logs"
@@ -123,14 +123,12 @@ resource "aws_codebuild_project" "langwatch_build" {
   }
 
   source {
-    type                = "CODECOMMIT"
-    location            = aws_codecommit_repository.langwatch[0].clone_url_http
-    git_clone_depth     = 1
-    report_build_status = false
-    buildspec           = <<-BUILDSPEC
+    type      = "NO_SOURCE"
+    buildspec = <<-BUILDSPEC
       version: 0.2
       env:
         variables:
+          LANGWATCH_GITHUB_REPO: "${var.langwatch_github_repo_url}"
           ECR_LANGWATCH_URL: "${aws_ecr_repository.langwatch.repository_url}"
           ECR_LANGWATCH_NLP_URL: "${aws_ecr_repository.langwatch_nlp.repository_url}"
           ECR_LANGEVALS_URL: "${aws_ecr_repository.langevals.repository_url}"
@@ -140,6 +138,8 @@ resource "aws_codebuild_project" "langwatch_build" {
       phases:
         pre_build:
           commands:
+            - echo "Cloning from GitHub..."
+            - git clone --depth 1 $LANGWATCH_GITHUB_REPO .
             - echo "Logging in to Amazon ECR..."
             - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
         build:
@@ -184,10 +184,7 @@ resource "aws_codebuild_project" "langwatch_build" {
     }
   }
 
-  depends_on = [
-    aws_cloudwatch_log_group.codebuild_langwatch_build,
-    aws_codecommit_repository.langwatch
-  ]
+  depends_on = [aws_cloudwatch_log_group.codebuild_langwatch_build]
 
   tags = {
     Name = "${var.project_name}-${var.environment}-langwatch-build"

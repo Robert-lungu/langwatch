@@ -19,8 +19,9 @@ project_name = "langwatch"
 # ecr_image_tag = "latest"
 
 # Build LangWatch from source via CodeBuild (enables HTTP support)
-# Set true, push code to CodeCommit, then run: aws codebuild start-build --project-name <langwatch_build_codebuild_project>
+# Push to GitHub, then run: aws codebuild start-build --project-name <langwatch_build_codebuild_project>
 # build_langwatch_from_source = true
+# langwatch_github_repo_url   = "https://github.com/YOUR_USERNAME/langwatch.git"
 
 # -----------------------------------------------------------------------------
 # REQUIRED: Set these before applying

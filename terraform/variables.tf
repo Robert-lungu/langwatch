@@ -95,9 +95,15 @@ variable "ecr_image_tag" {
 }
 
 variable "build_langwatch_from_source" {
-  description = "Build LangWatch app from source via CodeBuild (enables HTTP support). Requires pushing code to CodeCommit first."
+  description = "Build LangWatch app from source via CodeBuild (enables HTTP support). Uses GitHub repo."
   type        = bool
   default     = false
+}
+
+variable "langwatch_github_repo_url" {
+  description = "GitHub repo URL for LangWatch source (e.g. https://github.com/Robert-lungu/langwatch.git)"
+  type        = string
+  default     = "https://github.com/Robert-lungu/langwatch.git"
 }
 
 variable "public_url" {

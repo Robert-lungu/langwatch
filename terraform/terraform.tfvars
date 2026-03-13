@@ -18,8 +18,9 @@ acm_certificate_arn = ""
 use_ecr       = true
 ecr_image_tag = "latest"
 
-# Build LangWatch from source via CodeBuild (enables HTTP support, no local build)
+# Build LangWatch from source via CodeBuild (enables HTTP support)
 build_langwatch_from_source = true
+langwatch_github_repo_url   = "https://github.com/Robert-lungu/langwatch.git"
 
 # -----------------------------------------------------------------------------
 # REQUIRED: Set these before applying

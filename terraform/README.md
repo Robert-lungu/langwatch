@@ -135,17 +135,11 @@ When testing with the ALB URL directly (no custom domain), leave `public_url` em
 
 **Important for HTTP:** The public Docker image forces HTTPS (assets fail with `ERR_CONNECTION_REFUSED`). Use CodeBuild to build from source:
 
-1. Set `build_langwatch_from_source = true` in `terraform.tfvars`
+1. Set `build_langwatch_from_source = true` and `langwatch_github_repo_url = "https://github.com/YOUR_USERNAME/langwatch.git"` in `terraform.tfvars`
 2. Run `terraform apply`
-3. Configure Git for CodeCommit (one-time): `git config --global credential.helper '!aws codecommit credential-helper $@'` and `git config --global credential.UseHttpPath true`
-4. Push your code to CodeCommit:
-   ```bash
-   CODECOMMIT_URL=$(terraform output -raw langwatch_codecommit_clone_url)
-   git remote add codecommit $CODECOMMIT_URL
-   git push codecommit main
-   ```
-5. Run the build: `aws codebuild start-build --project-name $(terraform output -raw langwatch_build_codebuild_project) --region eu-west-1`
-6. Force ECS deployment: `aws ecs update-service --cluster langwatch-prod --service langwatch-prod-app --force-new-deployment --region eu-west-1`
+3. Push your code to GitHub: `git push origin main`
+4. Run the build: `aws codebuild start-build --project-name $(terraform output -raw langwatch_build_codebuild_project) --region eu-west-1`
+5. Force ECS deployment: `aws ecs update-service --cluster langwatch-prod --service langwatch-prod-app --force-new-deployment --region eu-west-1`
 
 For production with a custom domain (e.g. `https://langwatch.islandnetworks.com`):
 
